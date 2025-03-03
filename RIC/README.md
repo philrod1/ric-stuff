@@ -46,9 +46,9 @@
     git clone https://gerrit.o-ran-sc.org/r/ric-plt/ric-dep
     message "Install kubernetes, helm and docker"
     cd ric-dep/bin
-    ./install_k8s_and_helm.sh
+    sudo ./install_k8s_and_helm.sh
     message "Install chartmuseum and ric-common template
-    ./install_common_templates_to_helm.sh
+    sudo ./install_common_templates_to_helm.sh
 
 
 ## Configure 'docker' and 'kubectl' For Non-root User 
@@ -60,7 +60,7 @@
     mkdir -p ~/.kube
     sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
     sudo chown -R $USER:$USER ~/.kube
-    chmod o+rx ~/.kube/config
+    chmod 600 ~/.kube/config
 
 
 ## Configure Helm
@@ -68,8 +68,9 @@
     message "Setup Helm"
     cd ~
     mkdir -p ~/.helm
-    helm init --upgrade
-    helm install stable/nfs-server-provisioner --namespace ricinfra --name nfs-release-1
+    helm repo add stable https://charts.helm.sh/stable
+    helm repo update
+    helm install nfs-release-1 stable/nfs-server-provisioner --namespace ricinfra --create-namespace
     kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 
@@ -98,7 +99,7 @@
 
     message "Deploying the RIC"
     cd ~/ric-dep/bin
-    
+
     sed -i 's/ricip: "[^"]*"/ricip: "$myip"/g' ../RECIPE_EXAMPLE/PLATFORM/example_recipe_oran_e_release_modified_e2.yaml
     sed -i 's/auxip: "[^"]*"/ricip: "$myip"/g' ../RECIPE_EXAMPLE/PLATFORM/example_recipe_oran_e_release_modified_e2.yaml
     . ./deploy-ric-platform ../RECIPE_EXAMPLE/PLATFORM/example_recipe_oran_e_release_modified_e2.yaml
