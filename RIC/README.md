@@ -103,7 +103,7 @@
     cd ~/ric-dep/bin
     sed -i "s/ricip: \"[^\"]*\"/ricip: \"$myip\"/g" ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
     sed -i "s/auxip: \"[^\"]*\"/auxip: \"$myip\"/g" ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
-    sudo kubectl ./install -f ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
+    sudo ./install -f ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
     message "DONE!"
 
 
