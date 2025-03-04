@@ -1,0 +1,41 @@
+---
+  - name: "Start SRS Components"
+    hosts: localhost
+    gather_facts: no
+    connection: local 
+    tasks:
+
+    - name: Read URL contents
+      uri:
+        url: "http://localhost:3000/configs/test.json"
+        method: GET
+        return_content: yes
+      register: json_content
+
+    - name: "Clear out the old logs"
+      ignore_errors: true
+      shell: "rm $HOME/srs_logs/*.log"
+
+    - name: "Start EPC"
+      shell: "screen -mdSA epc /bin/bash -c 'srsepc 2>&1 | tee $HOME/srs_logs/epc.log'"
+
+    - name: "Start ENB"
+      shell: "screen -mdSA enb /bin/bash -c './startENB.sh 2>&1 | tee $HOME/srs_logs/enb.log'"
+
+    - name: "Start UE0"
+      shell: "screen -mdSA ue_0 /bin/bash -c './startUE.sh 0 2>&1 | tee $HOME/srs_logs/ue_0.log'"
+
+    - name: "Start UE1"
+      shell: "screen -mdSA ue_1 /bin/bash -c './startUE.sh 1 2>&1 | tee $HOME/srs_logs/ue_1.log'"
+
+    - name: "Start UE2"
+      shell: "screen -mdSA ue_2 /bin/bash -c './startUE.sh 2 2>&1 | tee $HOME/srs_logs/ue_2.log'"
+
+    - name: "Start UE3"
+      shell: "screen -mdSA ue_3 /bin/bash -c './startUE.sh 3 2>&1 | tee $HOME/srs_logs/ue_3.log'"
+
+    - name: "Start UE4"
+      shell: "screen -mdSA ue_4 /bin/bash -c './startUE.sh 4 2>&1 | tee $HOME/srs_logs/ue_4.log'"
+
+    - name: "Start UE5"
+      shell: "screen -mdSA ue_5 /bin/bash -c './startUE.sh 5 2>&1 | tee $HOME/srs_logs/ue_5.log'"

@@ -18,6 +18,7 @@
     export E2NODE_PORT=5006
     export E2TERM_IP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2term-sctp-alpha -o jsonpath='{.items[0].spec.clusterIP}'`
 
+
 ## Do apt Stuff
 
     message () { echo -e "\e[1;93m$1\e[0m"; }
@@ -26,8 +27,9 @@
     sudo apt update
     sudo apt upgrade -y     
     sudo apt install -y libuhd-dev libuhd4.1.0 uhd-host libzmq3-dev
-    sudo apt install -y pax openssh-server build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev libtool autoconf ccache
+    sudo apt install -y python3-pip npm iperf3 pax openssh-server build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev libtool autoconf ccache
     mkdir $HOME/srs_logs
+    pip3 install websockets
 
 
 ## Install asn1c Compiler
@@ -46,7 +48,8 @@
 ## Build and install srsRAN E2 agent
 
     message "Cloning the srsRAN-e2 project"
-    cd ~/oaic/srsRAN-e2
+    git clone https://github.com/philrod1/srsRAN-e2.git
+    cd ~/srsRAN-e2
     mkdir build
     export SRS=`realpath .`
     cd build
@@ -69,34 +72,26 @@
 
 ## Generate Start Scripts
 
-    message "Generate SRS start scripts"
-cat > ~/startEPC.sh <<EOF
-#!/bin/bash
-sudo srsepc
-EOF
-    
-    cat > ~/startENB.sh <<EOF
-#!/bin/bash
-    
-    sudo srsenb \
-    --enb.n_prb=50 \
-    --enb.name=enb1 \
-    --enb.enb_id=0x19B \
-    --rf.device_name=zmq \
-    --rf.device_args="fail_on_disconnect=true,tx_port0=tcp://*:2000,rx_port0=tcp://localhost:2001,tx_port1=tcp://*:2100,rx_port1=tcp://localhost:2101,id=enb,base_srate=23.04e6" \
-    --ric.agent.remote_ipv4_addr=${E2TERM_IP} \
-    --log.all_level=warn \
-    --ric.agent.log_level=debug \
-    --log.filename=stdout \
-    --ric.agent.local_ipv4_addr=${myip} \
-    --ric.agent.local_port=${E2NODE_PORT}
-EOF
-    
-    cat > ~/startUE.sh <<EOF
-#!/bin/bash
-sudo ip netns add ue1
-sudo srsue --gw.netns=ue1
-EOF
+    cd ~
+    mkdir scripts
+    mkdir iperf
+    cd scripts
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/killAllThings.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/iperf.yml
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/srs.yml
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startClient.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startServer.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startENB.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startUE.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/stopIperf.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/stopSRS.sh
+    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/radio.py
+    sed -i "s|\$HOME|$HOME|g" srs.yml
+    sed -i "s|\$HOME|$HOME|g" iperf.yml
+    sed -i "s|\$HOME|$HOME|g" startServer.sh
+    sed -i "s|\"\$E2TERM\"|$E2TERM|g" startENB.sh
+    sed -i "s|\"\$myip\"|$myip|g" startENB.sh
+    chmod +x *.sh   
 
 
 ## Start the Services 
