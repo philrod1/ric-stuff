@@ -125,26 +125,13 @@
     sudo apt install -y openssh-server nfs-common nginx
     cd /etc/nginx/sites-enabled
     sudo unlink default
-    cd
+    cd ~
     mkdir xapp_config_files
     sudo chown $USER:www-data xapp_config_files
     cd /etc/nginx/conf.d
     sudo curl -o xapp_configs.local.conf https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/xapp_configs.local.conf
     sudo sed -i "s/\$USER/$USER/g" xapp_configs.local.conf
-    sudo service nginx restart
-    
-
-## Onboard the KPIMON xApp
-
-    message "Onbaording the KPIMON xApp"
-    export KONG_PROXY=`kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath="{.items[0].spec.clusterIP}"`
-    cd ~/oaic/ric-scp-kpimon/
-    cp ~/oaic/ric-scp-kpimon/scp-kpimon-config-file.json ~/xapp_config_files/
-    tmp="$(jq '.containers[0].image.registry = "oaic.local:5008"' ~/xapp_config_files/scp-kpimon-config-file.json)" && echo -E "${tmp}" > ~/xapp_config_files/scp-kpimon-config-file.json
-    docker build . -t oaic.local:5008/scp-kpimon:1.0.1
-    curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-raw "{\"config-file.json_url\":\"http://$myip:5010/scp-kpimon-config-file.json\"}"
-    curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "scp-kpimon"}'
-    
+      
 
 #### That's it for now.  Just re-login and wait for the pods to start.
 
