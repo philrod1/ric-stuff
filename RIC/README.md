@@ -98,11 +98,12 @@
 #### main RIC components from the O-RAN alliance 'e' release
 
     message "Deploying the RIC"
+    cd ~/ric-dep/RECIPE_EXAMPLE
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/ric_recipe_oran_k_release_modified_e2.yaml
     cd ~/ric-dep/bin
-
-    sed -i 's/ricip: "[^"]*"/ricip: "$myip"/g' ../RECIPE_EXAMPLE/PLATFORM/example_recipe_oran_e_release_modified_e2.yaml
-    sed -i 's/auxip: "[^"]*"/ricip: "$myip"/g' ../RECIPE_EXAMPLE/PLATFORM/example_recipe_oran_e_release_modified_e2.yaml
-    ./install -f ../RECIPE_EXAMPLE/PLATFORM/example_recipe_oran_e_release_modified_e2.yaml
+    sed -i "s/ricip: \"[^\"]*\"/ricip: \"$myip\"/g" ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
+    sed -i "s/auxip: \"[^\"]*\"/auxip: \"$myip\"/g" ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
+    sudo kubectl ./install -f ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
     message "DONE!"
 
 
@@ -113,7 +114,7 @@
     echo 'export E2MGR_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2mgr-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     echo 'export KONG_PROXY=`kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     echo 'export APPMGR_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
-    echo 'export ONBOARDER_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
+    echo '# export ONBOARDER_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     echo 'export E2TERM=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2term-sctp-alpha -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     source ~/.bashrc
 
