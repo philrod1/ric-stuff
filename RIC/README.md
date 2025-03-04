@@ -129,7 +129,7 @@
     mkdir xapp_config_files
     sudo chown $USER:www-data xapp_config_files
     cd /etc/nginx/conf.d
-    sudo curl -o xapp_configs.local.conf https://raw.githubusercontent.com/philrod1/oaic-ric-installer/master/xapp_configs.local.conf
+    sudo curl -o xapp_configs.local.conf https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/xapp_configs.local.conf
     sudo sed -i "s/\$USER/$USER/g" xapp_configs.local.conf
     sudo service nginx restart
     
