@@ -1,6 +1,6 @@
 # srsRAN Project
 #### This README file is also the script that does all of the things.  You can run it with this command: -
-#### curl -L https://raw.githubusercontent.com/philrod1/srsRAN-installer/main/README.md | bash
+#### curl -L https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/srsRAN/README.md | bash
 #### Alternatively, you can click on the 🖉 symbol in Github and copy the raw markdown.
 #### You could also run each section by using the copy option
 
@@ -16,7 +16,7 @@
 
     export myip=`hostname  -I | cut -f1 -d' '`
     export E2NODE_PORT=5006
-    export E2TERM_IP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2term-sctp-alpha -o jsonpath='{.items[0].spec.clusterIP}'`
+    export E2TERM_IP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2term-sctp-alpha -o jsonpath='{.items[0].spec.clusterIP}'`
 
 ## Do apt Stuff
 

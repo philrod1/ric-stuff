@@ -24,6 +24,7 @@
     echo "export myip=`hostname  -I | cut -f1 -d' '`" >> ~/.bashrc
     echo 'export KUBECONFIG="${HOME}/.kube/config"' >> ~/.bashrc
     echo 'export HELM_HOME="${HOME}/.helm"' >> ~/.bashrc
+    echo 'export CHART_REPO_URL=http://0.0.0.0:8090' >> ~/.bashrc
 
 
 ## Refresh apt
@@ -31,7 +32,7 @@
     message "Refresh apt"
     sudo apt update
     sudo apt upgrade -y
-    sudo apt install -y openssh-server nfs-common nginx python3-pip
+    sudo apt install -y openssh-server nfs-common nginx python3-pip npm
 
 
 ## Install Ansible
@@ -112,7 +113,7 @@
 
     message "Useful aliases for xApp deployment"
     echo 'export E2MGR_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2mgr-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
-    echo 'export KONG_PROXY=`kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
+    echo 'export KONG_PROXY=`kubectl get svc -n ricplt --field-selector metadata.name=r4-infrastructure-kong-proxy -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     echo 'export APPMGR_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     echo '# export ONBOARDER_HTTP=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
     echo 'export E2TERM=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2term-sctp-alpha -o jsonpath="{.items[0].spec.clusterIP}"`' >> ~/.bashrc
@@ -133,9 +134,33 @@
     sudo sed -i "s/\$USER/$USER/g" xapp_configs.local.conf
       
 
+## Install dms_cli for xApp management
+
+    message "Installing dms_cli"
+    cd ~
+    docker kill chartmuseum
+    docker run --rm -u 0 -it -d --name chartmuseum -p 8090:8080 -e DEBUG=1 -e STORAGE=local -e STORAGE_LOCAL_ROOTDIR=/charts -v $(pwd)/charts:/charts chartmuseum/chartmuseum:latest
+    export CHART_REPO_URL=http://0.0.0.0:8090
+    git clone "https://gerrit.o-ran-sc.org/r/ric-plt/appmgr"
+    cd appmgr/xapp_orchestrater/dev/xapp_onboarder
+    pip3 uninstall xapp_onboarder
+    sudo pip3 install ./
+
+
+## Install *RICMON*
+    message "Installing RICMON"
+    cd ~
+    git clone --branch srsRAN --single-branch https://github.com/philrod1/ricmon.git
+    cd ricmon
+    npm install
+    cd
+
+
 #### That's it for now.  Just re-login and wait for the pods to start.
 
     message "Run 'su - $USER' or re-login to finish up."
     message "After that, you can type 'pods' to check the status of the containers."
+    message "If you want to start RICMON, `cd ~/ricmon` then `npm start`"
+    message "Open a browser and go to http://<ip-address>:3003/pods"
     
 #### To install the SRS UE, ENb and EPC components, use this guide: https://github.com/philrod1/srsRAN-installer
