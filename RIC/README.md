@@ -47,7 +47,7 @@
     message "Install kubernetes, helm and docker"
     cd ric-dep/bin
     sudo ./install_k8s_and_helm.sh
-    message "Install chartmuseum and ric-common template
+    message "Install chartmuseum and ric-common template"
     sudo ./install_common_templates_to_helm.sh
 
 
