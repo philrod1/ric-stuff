@@ -70,22 +70,23 @@
     sudo pax -rw -pe -s/.example// . /root/.config/srsran/
 
 
-## Generate Start Scripts
+## Getting Scripts
 
     cd ~
     mkdir scripts
     mkdir iperf
     cd scripts
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/killAllThings.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/iperf.yml
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/srs.yml
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startClient.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startServer.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startENB.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/startUE.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/stopIperf.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/stopSRS.sh
-    wget https://raw.githubusercontent.com/philrod1/RIC-RAN-sim-installer/main/radio.py
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/killAllThings.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/iperf.yml
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/srs.yml
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/startClient.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/startServer.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/startENB.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/startUE.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/stopIperf.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/stopSRS.sh
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/radio.py
+    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/scripts/clean_evicted_pods.sh
     sed -i "s|\$HOME|$HOME|g" srs.yml
     sed -i "s|\$HOME|$HOME|g" iperf.yml
     sed -i "s|\$HOME|$HOME|g" startServer.sh
@@ -94,20 +95,30 @@
     chmod +x *.sh   
 
 
-## Start the Services 
+## Getting configs
 
-    #message "Starting the Services"
-    #cd
-    #mkdir srs_logs
-    #nohup bash startEPC.sh > ~/srs_logs/epc.log 2>&1 & echo $! > ~/srs_logs/epc.pid
-    #nohup bash startENB.sh > ~/srs_logs/enb.log 2>&1 & echo $! > ~/srs_logs/enb.pid
-    #nohup bash startUE.sh > ~/srs_logs/ue.log 2>&1 & echo $! > ~/srs_logs/ue.pid
-    #message "Done."
-    
-## Alternative to nohup
-#### I personally prefer screen to nohup.  I use variations of this command: -
-#### screen -S epc /bin/bash -c './startEPC.sh 2>&1 | tee srs_logs/epc.log'
-    
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/enb.conf -O /root/.config/srsran/enb.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/epc.conf -O /root/.config/srsran/epc.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/mbms.conf -O /root/.config/srsran/mbms.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/rb.conf -O /root/.config/srsran/rb.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/rr.conf -O /root/.config/srsran/rr.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/sib.conf -O /root/.config/srsran/sib.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/ue.conf -O /root/.config/srsran/ue.conf
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/slice_db.csv -O /root/.config/srsran/slice_db.csv
+    sudo wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/config/user_db.csv -O /root/.config/srsran/user_db.csv    
 
-## More Information
-#### The three services are running in the background using nohup.  The PID of the respective nohup processes are stored in files inside the srs_logs directory.  This information is pretty much useless, as the actual PID of the services will be something like 1-4 greater than the stored PID.  If you want to kill a service, you could simply do `sudo killall srsue` for example.  I might work on a more elegant solution at some point.
+
+## What now?
+### Start the RICMON web app (in a screen) from inside ~/ricmon with ``npm start``.  Open http://localhost:3003 or http://<ip-address>:3003
+### Start the things!  From inside ~/scripts
+#### Start srsRAN components with ``sudo ansible-playbook srs.yml``
+#### Start the radio with ``python3 radio.py``
+#### Check in the srs logs in Ricmon.  The UEs should be assigned IP addresses.  If not, try again.
+#### Start the iperf servers and clients with ``sudo ansible-playbook iperf.yml``
+#### Check the SIM in Ricmon.  You should see traffic indicated in the guages
+
+## Go again?
+### This stuff seems flaky and prone to failure.  The start-up routine needs to be done correctly to have any hope.
+### Restarting srsRAN is often required.  So often, in fact, that I made a script to help.
+#### First, stop the radio script with Ctrl-C
+#### Then, run the kill script from the scripts directory ``sudo ./killAllThings.sh``
