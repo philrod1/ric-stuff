@@ -1,0 +1,95 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "xApp Manifest Schema",
+    "description": "Schema for validating xApp manifest files.",
+    "type": "object",
+    "properties": {
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "name": { "type": "string" },
+                "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+                "author": { "type": "string" },
+                "license": { "type": "string" },
+                "contact": { "type": "string", "format": "email" }
+            },
+            "required": ["name", "version", "author", "license", "contact"]
+        },
+        "runtime_config": {
+            "type": "object",
+            "properties": {
+                "compatible_ric_versions": { "type": "array", "items": { "type": "string" } },
+                "deployment_platform": { "type": "string" },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": { "type": "string", "pattern": "^[0-9]+$" },
+                        "memory": { "type": "string", "pattern": "^[0-9]+GB$" },
+                        "gpu": { "type": "string", "pattern": "^[0-9]+$" }
+                    },
+                    "required": ["cpu", "memory"]
+                }
+            },
+            "required": ["compatible_ric_versions", "deployment_platform", "resources"]
+        },
+        "interfaces": {
+            "type": "object",
+            "properties": {
+                "e2_service_models": { "type": "array", "items": { "type": "string" } },
+                "messaging_types": { "type": "array", "items": { "type": "string" } },
+                "rmr_used": { "type": "boolean" }
+            },
+            "required": ["e2_service_models", "messaging_types", "rmr_used"]
+        },
+        "permissions": {
+            "type": "object",
+            "properties": {
+                "network_access": { "type": "boolean" },
+                "read_write_metrics": { "type": "boolean" },
+                "qoe_control": { "type": "boolean" }
+            },
+            "required": ["network_access", "read_write_metrics"]
+        },
+        "config_parameters": {
+            "type": "object",
+            "properties": {
+                "handover_threshold": { "type": "integer", "minimum": 0, "maximum": 100 },
+                "reporting_interval": { "type": "integer", "minimum": 1 }
+            },
+            "required": ["handover_threshold", "reporting_interval"]
+        },
+        "dependencies": {
+            "type": "object",
+            "properties": {
+                "required_xapps": { "type": "array", "items": { "type": "string" } },
+                "external_services": { "type": "array", "items": { "type": "string" } }
+            }
+        },
+        "security": {
+            "type": "object",
+            "properties": {
+                "sandboxed": { "type": "boolean" },
+                "trusted_execution": { "type": "boolean" }
+            }
+        },
+        "testing": {
+            "type": "object",
+            "properties": {
+                "test_scenarios": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "scenario_name": { "type": "string" },
+                            "expected_behavior": { "type": "string" },
+                            "test_method": { "type": "string" }
+                        },
+                        "required": ["scenario_name", "expected_behavior", "test_method"]
+                    }
+                }
+            },
+            "required": ["test_scenarios"]
+        }
+    },
+    "required": ["metadata", "runtime_config", "interfaces", "permissions", "config_parameters", "dependencies", "security", "testing"]
+}

@@ -1,0 +1,94 @@
+{
+  "xApp": {
+    "name": "Traffic Steering xApp",
+    "version": "1.0.3",
+    "description": "An xApp for dynamic UE traffic steering based on network conditions.",
+    "author": "Some Research Group",
+    "contact": "dev@researchteam.com",
+    "license": "Apache-2.0"
+  },
+  "runtime": {
+    "ric_compatibility": ["OSC-Bronze", "OSC-G", "FlexRIC"],
+    "deployment": {
+      "platform": "Docker",
+      "image": "registry.researchteam.com/xapp/traffic_steering:1.0.3",
+      "resources": {
+        "cpu": "2",
+        "memory": "4GB",
+        "gpu": "None"
+      }
+    }
+  },
+  "interfaces": {
+    "e2": {
+      "serviceModels": [
+        {
+          "id": "ORAN-E2SM-KPM",
+          "version": "2.0",
+          "actions": ["Report", "Insert", "Control"]
+        }
+      ],
+      "messageTypes": ["RIC Indication", "RIC Control", "RIC Subscription"]
+    },
+    "rmr": {
+      "protocol": "RMR",
+      "mtype": ["RIC_SUB_REQ", "RIC_INDICATION", "RIC_CONTROL"]
+    }
+  },
+  "permissions": {
+    "network_access": true,
+    "read_metrics": true,
+    "modify_qoe_parameters": false
+  },
+  "configuration": {
+    "parameters": [
+      {
+        "name": "handover_threshold",
+        "type": "float",
+        "default": 5.0,
+        "description": "Threshold for triggering handovers (dB)."
+      },
+      {
+        "name": "reporting_interval",
+        "type": "integer",
+        "default": 1000,
+        "description": "Interval (ms) for E2SM-KPM reports."
+      }
+    ]
+  },
+  "dependencies": {
+    "xApps": [
+      {
+        "name": "QoE Optimization xApp",
+        "version": ">=1.0",
+        "required": false
+      }
+    ],
+    "external_services": [
+      {
+        "name": "Prometheus",
+        "type": "Monitoring",
+        "url": "http://monitoring.example.com"
+      }
+    ]
+  },
+  "security": {
+    "sandboxing": true,
+    "trusted_execution": false
+  }
+  "testing": {
+    "test_scenarios": [
+        "Validate correct handover decision based on signal strength",
+        "Ensure error handling for malformed E2 messages",
+        "Performance test under heavy UE load"
+    ],
+    "expected_behavior": {
+        "handover_threshold": "Triggers handover at correct signal level",
+        "failure_handling": "Logs and retries upon failure"
+    },
+    "testing_dependencies": [
+        "Unit test framework: pytest",
+        "Simulation environment: OpenRAN Gym"
+    ]
+}
+}
