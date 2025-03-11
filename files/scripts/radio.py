@@ -29,7 +29,7 @@ class dynamic_scenario(gr.top_block):
     def __init__(self):
         gr.top_block.__init__(self, "dynamic_scenario")
 
-        with urllib.request.urlopen("http://localhost:3000/configs/test.json") as url:
+        with urllib.request.urlopen("http://localhost:3003/configs/test.json") as url:
             data = json.load(url)
         
         cells = data['gnbs']

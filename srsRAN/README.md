@@ -30,6 +30,7 @@
     sudo apt install -y python3-pip npm iperf3 pax openssh-server build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev libtool autoconf ccache
     mkdir $HOME/srs_logs
     pip3 install websockets
+    sudo pip3 install --upgrade Jinja2
 
 
 ## Install asn1c Compiler

@@ -1,5 +1,5 @@
 #!/bin/bash
-url="http://localhost:3000/configs/test.json"
+url="http://localhost:3003/configs/test.json"
 json=$(curl -s "$url")
 count=$(echo "$json" | jq -r '.gnbs | length')
 port=2000

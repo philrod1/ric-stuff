@@ -7,7 +7,7 @@
 
     - name: Read URL contents
       uri:
-        url: "http://localhost:3000/configs/test.json"
+        url: "http://localhost:3003/configs/test.json"
         method: GET
         return_content: yes
       register: json_content
