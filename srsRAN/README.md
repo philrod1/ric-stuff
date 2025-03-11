@@ -48,6 +48,7 @@
 ## Build and install srsRAN E2 agent
 
     message "Cloning the srsRAN-e2 project"
+    cd
     git clone https://github.com/philrod1/srsRAN-e2.git
     cd ~/srsRAN-e2
     mkdir build
@@ -109,7 +110,7 @@
 
 
 ## What now?
-### Start the RICMON web app (in a screen) from inside ~/ricmon with ``npm start``.  Open http://localhost:3003 or http://<ip-address>:3003
+### Start the RICMON web app (in a screen) from inside ~/ricmon with `npm start`.  Open `http://localhost:3003` or `http://<ip-address>:3003`
 ### Start the things!  From inside ~/scripts
 #### Start srsRAN components with ``sudo ansible-playbook srs.yml``
 #### Start the radio with ``python3 radio.py``
