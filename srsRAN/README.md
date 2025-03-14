@@ -1,6 +1,6 @@
 # srsRAN Project
 #### This README file is also the script that does all of the things.  You can run it with this command: -
-#### curl -L https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/srsRAN/README.md | bash
+#### curl -L https://raw.githubusercontent.com/philrod1/ric-stuff/main/srsRAN/README.md | bash
 #### Alternatively, you can click on the 🖉 symbol in Github and copy the raw markdown.
 #### You could also run each section by using the copy option
 
@@ -113,15 +113,17 @@
 
 ## What now?
 ### Start the RICMON web app (in a screen) from inside ~/ricmon with `npm start`.  Open `http://localhost:3003` or `http://<ip-address>:3003`
-### Start the things!  From inside ~/scripts
+### Start the xApp Store from inside ~/appstore with `npm start`.  Open `http://localhost:3000` or `http://<ip-address>:3000`
+### Start the RAN stuff!  From inside ~/scripts ...
 #### Start srsRAN components with ``sudo ansible-playbook srs.yml``
-#### Start the radio with ``python3 radio.py``
-#### Check in the srs logs in Ricmon.  The UEs should be assigned IP addresses.  If not, try again.
+#### Start the radio (in a screen or sepatate terminal) with ``python3 radio.py``
+#### Open the SIM in RICMON.  Nothing should be happening yet, but the sim talks to GNURadio.
+#### Check in the srs logs in RICMON.  The UEs should be assigned IP addresses.  If not, try again.
 #### Start the iperf servers and clients with ``sudo ansible-playbook iperf.yml``
-#### Check the SIM in Ricmon.  You should see traffic indicated in the guages
+#### Check the SIM in RICMON.  You should see traffic indicated in the guages
 
 ## Go again?
 ### This stuff seems flaky and prone to failure.  The start-up routine needs to be done correctly to have any hope.
 ### Restarting srsRAN is often required.  So often, in fact, that I made a script to help.
 #### First, stop the radio script with Ctrl-C
-#### Then, run the kill script from the scripts directory ``sudo ./killAllThings.sh``
+#### Then, run the kill script from the scripts directory ``./killAllThings.sh``

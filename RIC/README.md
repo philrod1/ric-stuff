@@ -1,6 +1,6 @@
 # RIC All-in-One Install Script
 #### This README file is also the script that does all of the things.  You can run it with this command: -
-#### curl -L https://raw.githubusercontent.com/philrod1/ric-stuff/master/RIC/README.md | bash
+#### curl -L https://raw.githubusercontent.com/philrod1/ric-stuff/main/RIC/README.md | bash
 #### Alternatively, you can click on the 🖉 symbol in Github and copy the raw markdown.
 #### You could also run each section by using the copy option
 
@@ -138,6 +138,7 @@
 
     message "Installing dms_cli"
     cd ~
+    pip install --upgrade Flask flask-restx
     docker kill chartmuseum
     docker run --rm -u 0 -it -d --name chartmuseum -p 8090:8080 -e DEBUG=1 -e STORAGE=local -e STORAGE_LOCAL_ROOTDIR=/charts -v $(pwd)/charts:/charts chartmuseum/chartmuseum:latest
     export CHART_REPO_URL=http://0.0.0.0:8090
@@ -154,7 +155,27 @@
     cd ricmon
     sed -i "s/\(ws:\/\/\)[0-9.]\+\(:8765\)/\1$myip\2/" public/javascripts/sketch.js
     npm install
-    cd
+    ansible localhost -m shell -a "screen -dmS ricmon npm start"
+
+
+## Install *xApp Store*
+    message "Installing xApp Store"
+    cd ~
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    nvm install 16
+    nvm use 16
+    wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+    sudo apt-get update
+    sudo apt-get install -y mongodb-org
+    sudo systemctl start mongod
+    sudo systemctl enable mongod
+    sudo systemctl status mongod
+    cd ~
+    git clone https://github.com/philrod1/appstore.git
+    cd appstore
+    npm install
+    ansible localhost -m shell -a "screen -dmS xappstore npm start"
 
 
 #### That's it for now.  Just re-login and wait for the pods to start.
@@ -163,5 +184,8 @@
     message "After that, you can type 'pods' to check the status of the containers."
     message "If you want to start RICMON, `cd ~/ricmon` then `npm start`"
     message "Open a browser and go to http://<ip-address>:3003/pods"
+    message "For the xApp Store, go to http://<ip-address>:3000"
+    message "You will need to manually restart RICMON and the xApp Store if you reboot your machine"
     
-#### To install the SRS UE, ENb and EPC components, use this guide: https://github.com/philrod1/srsRAN-installer
+
+#### Go to `https://github.com/philrod1/ric-stuff/tree/main/srsRAN` for the next part
