@@ -108,28 +108,12 @@ e2mgr:
     stateChangeMessageChannel: RAN_CONNECTION_STATUS_CHANGE
     ranManipulationMessageChannel: RAN_MANIPULATION
 
-# e2term:
-#   alpha:
-#     image:
-#       registry: "nexus3.o-ran-sc.org:10002/o-ran-sc"
-#       name: ric-plt-e2
-#       tag: 6.0.6
-#     privilegedmode: false
-#     hostnetworkmode: false
-#     env:
-#       print: "1"
-#       messagecollectorfile: "/data/outgoing/"
-#     dataVolSize: 100Mi
-#     storageClassName: local-storage
-#     pizpub:
-#       enabled: false
-
 e2term:
   alpha:
     image:
-      registry: "localhost:5001"
+      registry: "nexus3.o-ran-sc.org:10002/o-ran-sc"
       name: ric-plt-e2
-      tag: 5.5.0
+      tag: 6.0.6
     privilegedmode: false
     hostnetworkmode: false
     env:
@@ -139,6 +123,22 @@ e2term:
     storageClassName: local-storage
     pizpub:
       enabled: false
+
+# e2term:
+#   alpha:
+#     image:
+#       registry: "localhost:5001"
+#       name: ric-plt-e2
+#       tag: 5.5.0
+#     privilegedmode: false
+#     hostnetworkmode: false
+#     env:
+#       print: "1"
+#       messagecollectorfile: "/data/outgoing/"
+#     dataVolSize: 100Mi
+#     storageClassName: local-storage
+#     pizpub:
+#       enabled: false
 
 
 jaegeradapter:

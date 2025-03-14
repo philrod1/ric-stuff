@@ -35,7 +35,8 @@
 
 ## Install asn1c Compiler
 
-    message "Installing asn1c compiler"
+    cd ~
+    sudo apt install libtool autoconf
     git clone https://gitlab.eurecom.fr/oai/asn1c.git
     cd asn1c
     git checkout velichkov_s1ap_plus_option_group
@@ -49,7 +50,7 @@
 ## Build and install srsRAN E2 agent
 
     message "Cloning the srsRAN-e2 project"
-    cd
+    cd ~
     git clone https://github.com/philrod1/srsRAN-e2.git
     cd ~/srsRAN-e2
     mkdir build

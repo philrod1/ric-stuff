@@ -85,13 +85,13 @@
 
 ## Build Modified E2 Termination Pod
 
-    message "Deploying E2 Termination"
-    cd ~
-    git clone https://github.com/philrod1/ric-plt-e2
-    docker run -v /registry-storage:$HOME/registry -d -p 5001:5000 --restart=always --name ric registry:2
-    cd ~/ric-plt-e2/RIC-E2-TERMINATION
-    docker build -f Dockerfile -t localhost:5001/ric-plt-e2:5.5.0 .
-    docker push localhost:5001/ric-plt-e2:5.5.0
+    #message "Deploying E2 Termination"
+    #cd ~
+    #git clone https://github.com/philrod1/ric-plt-e2
+    #docker run -v /registry-storage:$HOME/registry -d -p 5001:5000 --restart=always --name ric registry:2
+    #cd ~/ric-plt-e2/RIC-E2-TERMINATION
+    #docker build -f Dockerfile -t localhost:5001/ric-plt-e2:5.5.0 .
+    #docker push localhost:5001/ric-plt-e2:5.5.0
 
 
 ## Deploy the Base RIC Components
@@ -152,6 +152,7 @@
     cd ~
     git clone --branch srsRAN --single-branch https://github.com/philrod1/ricmon.git
     cd ricmon
+    sed -i "s/\(ws:\/\/\)[0-9.]\+\(:8765\)/\1$myip\2/" public/javascripts/sketch.js
     npm install
     cd
 
