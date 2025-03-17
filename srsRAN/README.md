@@ -112,15 +112,18 @@
 
 
 ## What now?
-### Start the RICMON web app (in a screen) from inside ~/ricmon with `npm start`.  Open `http://localhost:3003` or `http://<ip-address>:3003`
-### Start the xApp Store from inside ~/appstore with `npm start`.  Open `http://localhost:3000` or `http://<ip-address>:3000`
-### Start the RAN stuff!  From inside ~/scripts ...
+### If not already running: -
+#### Start the RICMON web app (in a screen) from inside ~/ricmon with `npm start`.  Open `http://localhost:3003` or `http://<ip-address>:3003`
+#### Start the xApp Store from inside `~/appstore` with `npm start`.  Open `http://localhost:3000` or `http://<ip-address>:3000`
+
+### Run the radio scripts.
+#### From inside `~/scripts`
 #### Start srsRAN components with ``sudo ansible-playbook srs.yml``
 #### Start the radio (in a screen or sepatate terminal) with ``python3 radio.py``
 #### Open the SIM in RICMON.  Nothing should be happening yet, but the sim talks to GNURadio.
 #### Check in the srs logs in RICMON.  The UEs should be assigned IP addresses.  If not, try again.
 #### Start the iperf servers and clients with ``sudo ansible-playbook iperf.yml``
-#### Check the SIM in RICMON.  You should see traffic indicated in the guages
+#### Check the SIM in RICMON.  You should see traffic indicated in the guages.
 
 ## Go again?
 ### This stuff seems flaky and prone to failure.  The start-up routine needs to be done correctly to have any hope.
