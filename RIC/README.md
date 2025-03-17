@@ -88,7 +88,7 @@
     #message "Deploying E2 Termination"
     #cd ~
     #git clone https://github.com/philrod1/ric-plt-e2
-    #docker run -v /registry-storage:$HOME/registry -d -p 5001:5000 --restart=always --name ric registry:2
+    docker run -v /registry-storage:$HOME/registry -d -p 5001:5000 --restart=always --name ric registry:2
     #cd ~/ric-plt-e2/RIC-E2-TERMINATION
     #docker build -f Dockerfile -t localhost:5001/ric-plt-e2:5.5.0 .
     #docker push localhost:5001/ric-plt-e2:5.5.0
@@ -187,7 +187,8 @@
 
     message "Run 'su - $USER' or re-login to finish up."
     message "After that, you can type 'pods' to check the status of the containers."
-    message "If you want to start RICMON, `cd ~/ricmon` then `npm start`"
+    message "If you want to start RICMON, 'cd ~/ricmon' then 'npm start'"
+    message "If you want to start the xApp Store, 'cd ~/appstore' then 'npm start'"
     message "Open a browser and go to http://<ip-address>:3003/pods"
     message "For the xApp Store, go to http://<ip-address>:3000"
     message "You will need to manually restart RICMON and the xApp Store if you reboot your machine"
