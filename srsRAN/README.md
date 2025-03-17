@@ -76,8 +76,7 @@
 ## Getting Scripts
 
     cd ~
-    su - $USER
-    source .bashrc
+    export E2TERM=`kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-e2term-sctp-alpha -o jsonpath="{.items[0].spec.clusterIP}"`
     echo "E2TERM: $E2TERM"
     echo "myip  : $myip"
     mkdir scripts
