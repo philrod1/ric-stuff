@@ -83,7 +83,7 @@
     docker run --rm -u 0 -it -d --name chartmuseum -p 8090:8080 -e DEBUG=1 -e STORAGE=local -e STORAGE_LOCAL_ROOTDIR=/charts -v $(pwd)/charts:/charts chartmuseum/chartmuseum:latest
 
 
-## Build Modified E2 Termination Pod
+## Build Modified E2 Termination (not currently used)
 
     #message "Deploying E2 Termination"
     #cd ~
@@ -92,6 +92,10 @@
     #cd ~/ric-plt-e2/RIC-E2-TERMINATION
     #docker build -f Dockerfile -t localhost:5001/ric-plt-e2:5.5.0 .
     #docker push localhost:5001/ric-plt-e2:5.5.0
+    #cd ~/ric-dep/RECIPE_EXAMPLE
+    #wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/ric_recipe_oran_k_release_modified_e2.yaml
+    #ln -sf ric_recipe_oran_k_release_modified_e2.yaml example_recipe_latest_stable.yaml
+
 
 
 ## Deploy the Base RIC Components
@@ -99,12 +103,10 @@
 #### main RIC components from the O-RAN alliance 'e' release
 
     message "Deploying the RIC"
-    cd ~/ric-dep/RECIPE_EXAMPLE
-    wget https://raw.githubusercontent.com/philrod1/ric-stuff/refs/heads/main/files/ric_recipe_oran_k_release_modified_e2.yaml
     cd ~/ric-dep/bin
-    sed -i "s/ricip: \"[^\"]*\"/ricip: \"$myip\"/g" ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
-    sed -i "s/auxip: \"[^\"]*\"/auxip: \"$myip\"/g" ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
-    sudo ./install -f ../RECIPE_EXAMPLE/ric_recipe_oran_k_release_modified_e2.yaml
+    sed -i "s/ricip: \"[^\"]*\"/ricip: \"$myip\"/g" ../RECIPE_EXAMPLE/example_recipe_latest_stable.yaml
+    sed -i "s/auxip: \"[^\"]*\"/auxip: \"$myip\"/g" ../RECIPE_EXAMPLE/example_recipe_latest_stable.yaml
+    sudo ./install -f ../RECIPE_EXAMPLE/example_recipe_latest_stable.yaml
     message "DONE!"
 
 
