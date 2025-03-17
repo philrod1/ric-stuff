@@ -172,8 +172,8 @@
     sudo apt-get install -y mongodb-org
     sudo systemctl start mongod
     sudo systemctl enable mongod
-    sudo systemctl status mongod
     cd ~
+    source ~/.bashrc
     git clone https://github.com/philrod1/appstore.git
     cd appstore
     npm install
