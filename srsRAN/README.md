@@ -77,6 +77,8 @@
 
     cd ~
     source .bashrc
+    echo "E2TERM: $E2TERM"
+    echo "myip  : $myip"
     mkdir scripts
     mkdir iperf
     cd scripts
