@@ -164,6 +164,8 @@
     message "Installing xApp Store"
     cd ~
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    cd ~
+    source ~/.bashrc
     nvm install 16
     nvm use 16
     wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
@@ -172,8 +174,6 @@
     sudo apt-get install -y mongodb-org
     sudo systemctl start mongod
     sudo systemctl enable mongod
-    cd ~
-    source ~/.bashrc
     git clone https://github.com/philrod1/appstore.git
     cd appstore
     npm install
