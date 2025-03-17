@@ -76,6 +76,7 @@
 ## Getting Scripts
 
     cd ~
+    su - $USER
     source .bashrc
     echo "E2TERM: $E2TERM"
     echo "myip  : $myip"
