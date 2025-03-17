@@ -76,6 +76,7 @@
 ## Getting Scripts
 
     cd ~
+    source .bashrc
     mkdir scripts
     mkdir iperf
     cd scripts
